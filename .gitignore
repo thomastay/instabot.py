@@ -22,6 +22,7 @@ parts/
 sdist/
 var/
 wheels/
+img/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -104,3 +105,4 @@ tags
 
 #Files
 *.db
+*.ini
