@@ -5,13 +5,13 @@ import time
 import threading
 import configparser
 
-def schedule_post(sleep_time = 500):
+def schedule_post(sleep_time = 5000):
     """
     Schedules a post
     post() returns true if it posted a post, if not it returns false
     """
-
     while post():
+        print ("Postbot: Postbot is sleeping")
         time.sleep(sleep_time)
 
 def getDetails():
@@ -29,10 +29,8 @@ def main():
     username, passwd = getDetails()
     post_bot_thread = threading.Thread(target = schedule_post)
     liker_bot = init_bot(username, passwd)
-    liker_bot_thread = threading.Thread(target = run_bot, args = [liker_bot])
-
-
-
+    post_bot_thread.start()
+    run_bot(liker_bot)
 
 
 if __name__ == "__main__":

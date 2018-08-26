@@ -46,7 +46,9 @@ def post():
 
 #Login using Instagram API
     api = InstagramAPI(username, passwd)
+    print ("Postbot: ", end='')
     api.login()  # login
+    print ("Postbot: ", end='')
     isUploaded = api.uploadPhoto(filename, caption=captionStr)
     print ("Postbot: Is Uploaded {0}".format(isUploaded))
 
@@ -58,7 +60,8 @@ def post():
 #Close
     posts_db_c.close()
     posts_db.commit()
-    apt.logout()
+    signal.signal(signal.SIGTERM, api.logout())
+    atexit.register(apit.logout())
     return True
 
 if __name__ == "__main__":
