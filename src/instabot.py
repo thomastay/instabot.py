@@ -163,10 +163,10 @@ class InstaBot:
         self.database_name = database_name
         self.follows_db = sqlite3.connect(database_name, timeout=0, isolation_level=None)
         self.follows_db_c = self.follows_db.cursor()
-        self.posts_db_name = posts_db_name
-        self.posts_db = sqlite3.connect(posts_db_name, timeout=0,
-                                        isolation_level=None) # added a posts database
-        self.posts_db_c = self.posts_db.cursor()
+        #self.posts_db_name = posts_db_name
+        #self.posts_db = sqlite3.connect(posts_db_name, timeout=0,
+        #                                isolation_level=None) # added a posts database
+        #self.posts_db_c = self.posts_db.cursor()
         check_and_update(self)
         fake_ua = UserAgent()
         self.user_agent = check_and_insert_user_agent(self, str(fake_ua.random))
@@ -288,12 +288,12 @@ class InstaBot:
         })
 
         r = self.s.get(self.url)
-        self.s.headers.update({'X-CSRFToken': r.cookies['csrftoken']})
+        csrf_token = json.loads(re.search(r'>window._sharedData = (.*?);</script>', r.text, re.DOTALL).group(1))['config']['csrf_token']
+        self.s.headers.update({'X-CSRFToken': csrf_token})
         time.sleep(5 * random.random())
         login = self.s.post(
             self.url_login, data=self.login_post, allow_redirects=True)
-        self.s.headers.update({'X-CSRFToken': login.cookies['csrftoken']})
-        self.csrftoken = login.cookies['csrftoken']
+        self.csrftoken = csrf_token
         #ig_vw=1536; ig_pr=1.25; ig_vh=772;  ig_or=landscape-primary;
         self.s.cookies['ig_vw'] = '1536'
         self.s.cookies['ig_pr'] = '1.25'
@@ -730,7 +730,7 @@ class InstaBot:
                 self.new_auto_mod_comments()
                 # Bot iteration in 1 sec
                 time.sleep(3)
-                # print("Tic!")
+                print("Tic!")
             else:
                 print("sleeping until {hour}:{min}".format(hour=self.start_at_h,
                                                            min=self.start_at_m), end="\r")
@@ -872,7 +872,7 @@ class InstaBot:
                 url_tag = self.url_user_detail % (current_user)
                 try:
                     r = self.s.get(url_tag)
-                    all_data = json.loads(re.search('{"activity.+show_app', r.text, re.DOTALL).group(0)+'":""}')['entry_data']['ProfilePage'][0]
+                    all_data = json.loads(re.search('{"activity.+has_app', r.text, re.DOTALL).group(0)+'":""}')['entry_data']['ProfilePage'][0]
 
                     user_info = all_data['graphql']['user']
                     i = 0
