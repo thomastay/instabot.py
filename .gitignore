@@ -106,3 +106,4 @@ tags
 #Files
 *.db
 *.ini
+*.sh

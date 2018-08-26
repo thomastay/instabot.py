@@ -11,13 +11,13 @@ from src.unfollow_protocol import unfollow_protocol
 import configparser
 import InstagramAPI
 
-def init_bot():
+def init_bot(username, passwd):
     bot = InstaBot(
         login=username,
         password=passwd,
         like_per_day=1000,
         comments_per_day=0,
-        tag_list=['follow4follow', 'f4f', 'cute', 'l:212999109'],
+        tag_list=['deep', 'truth', 'love', 'life', 'funny', 'sad', 'honest'],
         tag_blacklist=[],
         user_blacklist={},
         max_like_for_one_tag=10,
@@ -114,5 +114,4 @@ if __name__ == "__main__":
     config.read("login.ini")
     username = config["LOGIN"]["username"]
     passwd = config["LOGIN"]["password"]
-    bot = init_bot()
-    bot.post_auto()
+    bot = init_bot(username, passwd)
